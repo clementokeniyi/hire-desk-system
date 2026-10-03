@@ -1,12 +1,45 @@
 # Hire Desk System — AV Equipment Rental
 
-A no-code booking and operations system built for an AV equipment rental 
-business. Customers submit hire requests through a multi-step online form. 
-Staff manage all bookings through a real-time internal dashboard. A 
-scheduled automation detects overdue returns daily and sends email alerts — 
-no code written.
+## The Problem
 
-## System Overview
+An AV equipment rental business was managing bookings manually. There was 
+no central system, no real-time visibility into what equipment was out or 
+overdue, and no structured way for customers to submit hire requests. Staff 
+were tracking everything by hand, chasing returns reactively, and had no 
+single place to see the status of all active bookings.
+
+## What I Built
+
+I designed and built a complete hire desk operations system from scratch — 
+without writing a single line of code.
+
+The system has three parts working together:
+
+- **A customer-facing booking form** — multi-step, with conditional logic 
+  for new vs existing customers, equipment selection linked to live pricing, 
+  and an automatic confirmation on submission
+- **A real-time staff dashboard** — showing all bookings grouped by status 
+  (Waiting, Confirmed, Out, Overdue, Returned) with individual booking 
+  detail views including equipment, quantities, daily rates, and totals
+- **An automated daily workflow** — running every morning at 08:00, 
+  detecting overdue returns via REST API calls, updating their status 
+  automatically, and sending email alerts to staff — no manual checking required
+
+## The Result
+
+Bookings flow from customer submission directly into the staff dashboard. 
+Staff arrive each morning with an up-to-date view of all active equipment 
+and an email summary of anything overdue — without touching a spreadsheet 
+or chasing anything manually. Overdue returns are caught and flagged 
+automatically, every day, without human intervention.
+
+## Live System
+
+Staff dashboard: https://6hvdk3x1c2.zite.so
+
+## How It Works
+
+### System Overview
 
 | Layer | Tool | Purpose |
 |---|---|---|
@@ -16,24 +49,20 @@ no code written.
 | Automation | Make.com | Scheduled daily workflow for overdue detection |
 | Notifications | Gmail | Automated email alerts for overdue bookings |
 
-## Database Structure
+### Database Structure
 
 Three relational tables:
 - **Customers** — name, email, linked bookings
 - **Equipment** — item name, daily rate, linked bookings
-- **Bookings** — booking number, customer, equipment (up to 3 lines), quantities, days, return date, returned date, total, status
+- **Bookings** — booking number, customer, equipment (up to 3 lines), 
+  quantities, days, return date, returned date, total, status
 
-## Booking Lifecycle
+### Booking Lifecycle
+
 Waiting → Confirmed → Out → Overdue (auto-detected) → Returned
 
-The dashboard surfaces each status in real time with counts.
-Overdue is highlighted in red when active.
 
-## Customer Booking Form
-
-Multi-step Fillout form (7 pages: Your details → Booking details → Equipment lines 1–3 → Submit → Confirmation). Includes conditional logic: existing customers select their name from a linked lookup; new customers enter their details directly. Form submission creates a new record in the Zite Bookings table via native integration with field mapping.
-
-## Automation — How Overdue Detection Works
+### Automation — Overdue Detection
 
 A Make.com scenario runs every day at 08:00.
 
@@ -45,11 +74,7 @@ A Make.com scenario runs every day at 08:00.
 | HTTP 2 | PATCH each record's Status field to "Overdue" |
 | Gmail | Send email alert with booking details for each overdue item |
 
-Execution history confirms the scenario runs successfully on schedule (verified: Oct 2 2026, 8:00:35 AM, Status: Success, Duration: 4 seconds).
-
-## Live System
-
-Staff dashboard: https://6hvdk3x1c2.zite.so
+Verified execution: Oct 2 2026, 8:00:35 AM — Status: Success, Duration: 4 seconds.
 
 ## Screenshots
 
