@@ -1,45 +1,30 @@
+<div align="center">
+
+<img src="https://img.shields.io/badge/No--Code-Operations%20System-6366F1?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Automation-Make.com-FF6B35?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Status-Live-06D6A0?style=for-the-badge"/>
+
+<br/><br/>
+
 # Hire Desk System — AV Equipment Rental
 
-## The Problem
+**A complete hire desk operations system built without writing a single line of code — bookings, real-time tracking, and automated overdue detection all working together.**
 
-An AV equipment rental business was managing bookings manually. There was 
-no central system, no real-time visibility into what equipment was out or 
-overdue, and no structured way for customers to submit hire requests. Staff 
-were tracking everything by hand, chasing returns reactively, and had no 
-single place to see the status of all active bookings.
+[View Live Dashboard →](https://6hvdk3x1c2.zite.so)
 
-## What I Built
+</div>
 
-I designed and built a complete hire desk operations system from scratch — 
-without writing a single line of code.
+---
 
-The system has three parts working together:
+## The problem
 
-- **A customer-facing booking form** — multi-step, with conditional logic 
-  for new vs existing customers, equipment selection linked to live pricing, 
-  and an automatic confirmation on submission
-- **A real-time staff dashboard** — showing all bookings grouped by status 
-  (Waiting, Confirmed, Out, Overdue, Returned) with individual booking 
-  detail views including equipment, quantities, daily rates, and totals
-- **An automated daily workflow** — running every morning at 08:00, 
-  detecting overdue returns via REST API calls, updating their status 
-  automatically, and sending email alerts to staff — no manual checking required
+An AV equipment rental business was managing bookings manually. No central system. No real-time visibility into what equipment was out or overdue. Staff were tracking everything by hand, chasing returns reactively, and had no single place to see the status of all active bookings.
 
-## The Result
+---
 
-Bookings flow from customer submission directly into the staff dashboard. 
-Staff arrive each morning with an up-to-date view of all active equipment 
-and an email summary of anything overdue — without touching a spreadsheet 
-or chasing anything manually. Overdue returns are caught and flagged 
-automatically, every day, without human intervention.
+## What I built
 
-## Live System
-
-Staff dashboard: https://6hvdk3x1c2.zite.so
-
-## How It Works
-
-### System Overview
+Three parts working together:
 
 | Layer | Tool | Purpose |
 |---|---|---|
@@ -49,22 +34,33 @@ Staff dashboard: https://6hvdk3x1c2.zite.so
 | Automation | Make.com | Scheduled daily workflow for overdue detection |
 | Notifications | Gmail | Automated email alerts for overdue bookings |
 
-### Database Structure
+---
 
-Three relational tables:
-- **Customers** — name, email, linked bookings
-- **Equipment** — item name, daily rate, linked bookings
-- **Bookings** — booking number, customer, equipment (up to 3 lines), 
-  quantities, days, return date, returned date, total, status
+## The result
 
-### Booking Lifecycle
+Bookings flow from customer submission directly into the staff dashboard. Staff arrive each morning with an up-to-date view of all active equipment and an email summary of anything overdue — without touching a spreadsheet or chasing anything manually. Overdue returns are caught and flagged automatically, every day, without human intervention.
 
-Waiting → Confirmed → Out → Overdue (auto-detected) → Returned
+---
 
+## Staff dashboard
 
-### Automation — Overdue Detection
+A real-time internal view showing all bookings grouped by status — Waiting, Confirmed, Out, Overdue, Returned — with individual booking detail views including equipment, quantities, daily rates, and totals.
 
-A Make.com scenario runs every day at 08:00.
+![Dashboard Overview](screenshots/01-dashboard-overview.png)
+
+---
+
+## Individual booking view
+
+Each booking record shows the full detail — customer, equipment lines, quantities, days hired, daily rates, return date, and running total. Staff can update status directly from this view.
+
+![Booking Detail](screenshots/04-booking-detail.png)
+
+---
+
+## Automated overdue detection
+
+A Make.com scenario runs every morning at 08:00. It queries all bookings where the return date has passed and no returned date has been logged — patches each record's status to Overdue automatically — then sends an email alert to staff for every flagged item. No manual checking required.
 
 | Step | Action |
 |---|---|
@@ -74,28 +70,53 @@ A Make.com scenario runs every day at 08:00.
 | HTTP 2 | PATCH each record's Status field to "Overdue" |
 | Gmail | Send email alert with booking details for each overdue item |
 
-Verified execution: Oct 2 2026, 8:00:35 AM — Status: Success, Duration: 4 seconds.
+> Verified execution: Oct 2 2026, 8:00:35 AM — Status: Success, Duration: 4 seconds.
 
-## Screenshots
+![Automation Diagram](screenshots/02-make-automation-diagram.png)
+![Execution History](screenshots/03-make-execution-history.png)
 
-See `/screenshots` for the full system walkthrough:
+---
 
-- `01-dashboard-overview` — real-time status cards with active Overdue alert
-- `02-make-automation-diagram` — full four-step automation pipeline
-- `03-make-execution-history` — confirmed scheduled runs with success status
-- `04-booking-detail` — individual booking view with line items and totals
-- `05-form-customer-details` — conditional logic for new vs existing customers
-- `06-form-equipment-selection` — equipment picker linked to database rates
-- `07-form-confirmation` — customer-facing submission confirmation
-- `08-form-database-mapping` — Fillout to Zite field mapping configuration
-- `09-database-overdue-record` — auto-detected overdue record in database
-- `10-database-bookings` — full bookings table with status labels
-- `11-database-customers` — customers table with linked booking counts
-- `12-database-equipment` — equipment catalogue with daily rates
+## Customer booking form
 
-## Built With
+A multi-step form with conditional logic — new vs existing customer paths, equipment selection linked to live database pricing, and an automatic confirmation on submission.
 
-- [Zite](https://zite.so) — database and staff dashboard
-- [Fillout](https://fillout.com) — customer booking form
-- [Make.com](https://make.com) — automation (scheduled + REST API)
-- Gmail — email notifications
+![Customer Details](screenshots/05-form-customer-details.png)
+![Equipment Selection](screenshots/06-form-equipment-selection.png)
+![Submission Confirmation](screenshots/07-form-confirmation.png)
+![Database Field Mapping](screenshots/08-form-database-mapping.png)
+
+---
+
+## Database
+
+Three relational tables powering the entire system.
+
+**Bookings** — booking number, customer, equipment (up to 3 lines), quantities, days, return date, returned date, total, status
+
+**Customers** — name, email, linked bookings
+
+**Equipment** — item name, daily rate, linked bookings
+
+### Booking lifecycle
+
+`Waiting` → `Confirmed` → `Out` → `Overdue` *(auto-detected)* → `Returned`
+
+![Overdue Record](screenshots/09-database-overdue-record.png)
+![Bookings Table](screenshots/10-database-bookings.png)
+![Customers Table](screenshots/11-database-customers.png)
+![Equipment Catalogue](screenshots/12-database-equipment.png)
+
+---
+
+## Stack
+
+`Zite` &nbsp; `Fillout` &nbsp; `Make.com` &nbsp; `Gmail`
+
+---
+
+<div align="center">
+
+Built by **C Okeniyi** · Operations & Automation
+
+</div>
